@@ -1,5 +1,3 @@
-> **DEPRECATION NOTICE**: This Puppet module is no longer maintained and should not be used.
-
 # puppet-traefik
 A Puppet module to manage [Traefik](https://traefik.io)
 
