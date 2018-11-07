@@ -22,16 +22,6 @@ class traefik::params {
 
   $os = downcase($::kernel)
 
-  if $::operatingsystem == 'Debian' {
-    if versioncmp($::operatingsystemmajrelease, '8') == 0 {
-      $init_style = 'systemd'
-    }
-  } elsif $::operatingsystem == 'Ubuntu' {
-    if versioncmp($::operatingsystemrelease, '14.04') == 0 {
-      $init_style = 'upstart'
-    }
-  }
-  if $init_style == undef {
-    fail('Unsupported OS')
-  }
+  $init_style = $facts['service_provider']
+
 }
