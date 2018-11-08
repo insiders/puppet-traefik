@@ -12,16 +12,16 @@ describe 'traefik::params' do
   describe 'with an unsupported architecture' do
     let(:facts) do
       {
-        :kernel => 'Linux',
-        :operatingsystem => 'Ubuntu',
-        :operatingsystemrelease => '14.04',
-        :architecture => 'sparc'
+        kernel: 'Linux',
+        operatingsystem: 'Ubuntu',
+        operatingsystemrelease: '14.04',
+        architecture: 'sparc',
       }
     end
 
     it do
       is_expected.to raise_error(
-        Puppet::Error, /Unsupported kernel architecture: sparc/
+        Puppet::Error, %r{Unsupported kernel architecture: sparc}
       )
     end
   end
@@ -29,13 +29,13 @@ describe 'traefik::params' do
   describe 'with an unsupported OS' do
     let(:facts) do
       {
-        :kernel => 'Linux',
-        :architecture => 'amd64',
-        :operatingsystem => 'Fedora',
-        :operatingsystemrelease => 'The explorer'
+        kernel: 'Linux',
+        architecture: 'amd64',
+        operatingsystem: 'Fedora',
+        operatingsystemrelease: 'The explorer',
       }
     end
 
-    it { is_expected.to raise_error(Puppet::Error, /Unsupported OS/) }
+    it { is_expected.to raise_error(Puppet::Error, %r{Unsupported OS}) }
   end
 end

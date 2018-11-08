@@ -3,7 +3,7 @@ require 'spec_helper'
 describe 'traefik::config::file' do
   on_supported_os.each do |os, facts|
     context "on #{os}" do
-      let(:facts) { facts.merge(:concat_basedir => '/tmp/concat') }
+      let(:facts) { facts.merge(concat_basedir: '/tmp/concat') }
 
       describe 'with default parameters' do
         it { is_expected.to compile }
@@ -20,20 +20,20 @@ describe 'traefik::config::file' do
           is_expected.to contain_concat__fragment('traefik_file_header')
             .with_target('/etc/traefik/traefik.toml')
             .with_order('10-0')
-            .with_content(/File configuration backend/)
+            .with_content(%r{File configuration backend})
         end
 
         it do
           is_expected.to contain_concat__fragment('traefik_file')
             .with_target('/etc/traefik/traefik.toml')
             .with_order('10-1')
-            .with_content(/^\[file\]$/)
-            .with_content(/^watch = false$/)
+            .with_content(%r{^\[file\]$})
+            .with_content(%r{^watch = false$})
         end
       end
 
       describe 'when filename is passed' do
-        let(:params) { {:filename => 'rules.toml'} }
+        let(:params) { { filename: 'rules.toml' } }
 
         it do
           is_expected.to contain_concat('/etc/traefik/rules.toml')
@@ -48,22 +48,23 @@ describe 'traefik::config::file' do
           is_expected.to contain_concat__fragment('traefik_rules_header')
             .with_target('/etc/traefik/rules.toml')
             .with_order('00')
-            .with_content(/WARNING: This file is managed by Puppet/)
-            .with_content(/rules\.toml/)
-            .with_content(/File configuration/)
+            .with_content(%r{WARNING: This file is managed by Puppet})
+            .with_content(%r{rules\.toml})
+            .with_content(%r{File configuration})
         end
 
         it do
           is_expected.to contain_traefik__config__section('file')
             .with_hash(
               'filename' => '/etc/traefik/rules.toml',
-              'watch' => false
+              'watch' => false,
             )
         end
       end
 
       describe 'when watch is true' do
-        let(:params) { {:watch => true} }
+        let(:params) { { watch: true } }
+
         it do
           is_expected.to contain_traefik__config__section('file')
             .with_hash('watch' => true)

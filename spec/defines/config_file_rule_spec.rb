@@ -3,7 +3,7 @@ require 'spec_helper'
 describe 'traefik::config::file_rule' do
   on_supported_os.each do |os, facts|
     context "on #{os}" do
-      let(:facts) { facts.merge(:concat_basedir => '/tmp/concat') }
+      let(:facts) { facts.merge(concat_basedir: '/tmp/concat') }
 
       let(:title) { 'test' }
 
@@ -15,7 +15,7 @@ describe 'traefik::config::file_rule' do
           is_expected.to contain_traefik__config__section('test-frontend')
             .with_table('frontends')
             .with_order('30-0')
-            .with_hash('test-frontend' => {'backend' => 'test-backend'})
+            .with_hash('test-frontend' => { 'backend' => 'test-backend' })
             .with_target('/etc/traefik/traefik.toml')
         end
 
@@ -23,8 +23,8 @@ describe 'traefik::config::file_rule' do
           is_expected.to contain_concat__fragment('traefik_test-frontend')
             .with_target('/etc/traefik/traefik.toml')
             .with_order('30-0-1')
-            .with_content(/^\[frontends.test-frontend\]$/)
-            .with_content(/^backend = "test-backend"$/)
+            .with_content(%r{^\[frontends.test-frontend\]$})
+            .with_content(%r{^backend = "test-backend"$})
         end
 
         it do
@@ -49,17 +49,17 @@ describe 'traefik::config::file_rule' do
             'servers' => {
               'server1' => {
                 'url' => 'http://127.0.0.1:5000',
-                'weight' => 1
-              }
-            }
+                'weight' => 1,
+              },
+            },
           }
         end
-        let(:params) { {:frontend => frontend} }
+        let(:params) { { frontend: frontend } }
 
         it do
           is_expected.to contain_traefik__config__section('test-frontend')
             .with_hash(
-              'test-frontend' => frontend.merge('backend' => 'test-backend')
+              'test-frontend' => frontend.merge('backend' => 'test-backend'),
             )
         end
       end
@@ -70,12 +70,12 @@ describe 'traefik::config::file_rule' do
             'servers' => {
               'server1' => {
                 'url' => 'http://127.0.0.1:5000',
-                'weight' => 1
-              }
-            }
+                'weight' => 1,
+              },
+            },
           }
         end
-        let(:params) { {:backend => backend} }
+        let(:params) { { backend: backend } }
 
         it do
           is_expected.to contain_traefik__config__section('test-backend')
@@ -84,7 +84,7 @@ describe 'traefik::config::file_rule' do
       end
 
       describe 'when a custom order is set' do
-        let(:params) { {:order => '42'} }
+        let(:params) { { order: '42' } }
 
         it do
           is_expected.to contain_traefik__config__section('test-frontend')
@@ -98,7 +98,7 @@ describe 'traefik::config::file_rule' do
       end
 
       describe 'when description is passed' do
-        let(:params) { {:description => 'Test setup'} }
+        let(:params) { { description: 'Test setup' } }
 
         it do
           is_expected.to contain_traefik__config__section('test-frontend')
@@ -107,11 +107,11 @@ describe 'traefik::config::file_rule' do
 
         it do
           is_expected.to contain_concat__fragment(
-            'traefik_test-frontend_header'
+            'traefik_test-frontend_header',
           )
             .with_target('/etc/traefik/traefik.toml')
             .with_order('30-0-0')
-            .with_content(/Test setup/)
+            .with_content(%r{Test setup})
         end
       end
     end

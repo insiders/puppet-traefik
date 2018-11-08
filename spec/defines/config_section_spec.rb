@@ -3,7 +3,7 @@ require 'spec_helper'
 describe 'traefik::config::section' do
   on_supported_os.each do |os, facts|
     context "on #{os}" do
-      let(:facts) { facts.merge(:concat_basedir => '/tmp/concat') }
+      let(:facts) { facts.merge(concat_basedir: '/tmp/concat') }
 
       let(:title) { 'test' }
 
@@ -24,33 +24,33 @@ describe 'traefik::config::section' do
       end
 
       describe 'when hash is passed' do
-        let(:params) { {:hash => {'key' => 'value'}} }
+        let(:params) { { hash: { 'key' => 'value' } } }
 
         it do
           is_expected.to contain_concat__fragment('traefik_test')
             .with_target('/etc/traefik/traefik.toml')
             .with_order('20-1')
-            .with_content(/^\[test\]$/)
-            .with_content(/^key = "value"$/)
+            .with_content(%r{^\[test\]$})
+            .with_content(%r{^key = "value"$})
         end
       end
 
       describe 'when description is passed' do
-        let(:params) { {:description => 'Test section'} }
+        let(:params) { { description: 'Test section' } }
 
         it do
           is_expected.to contain_concat__fragment('traefik_test_header')
             .with_target('/etc/traefik/traefik.toml')
             .with_order('20-0')
-            .with_content(/Test section/)
+            .with_content(%r{Test section})
         end
       end
 
       describe 'when a custom order is set' do
         let(:params) do
           {
-            :description => 'Test section',
-            :order => '33'
+            description: 'Test section',
+            order: '33',
           }
         end
 
@@ -66,7 +66,8 @@ describe 'traefik::config::section' do
       end
 
       describe 'when table is passed' do
-        let(:params) { {:table => 'tabular'} }
+        let(:params) { { table: 'tabular' } }
+
         it do
           is_expected.to contain_concat__fragment('traefik_test')
             .with_content("[tabular]\n")
@@ -76,10 +77,11 @@ describe 'traefik::config::section' do
       describe 'when table is false' do
         let(:params) do
           {
-            :table => false,
-            :hash => {'key' => 'value'}
+            table: false,
+            hash: { 'key' => 'value' },
           }
         end
+
         it do
           is_expected.to contain_concat__fragment('traefik_test')
             .with_content("key = \"value\"\n")
@@ -89,14 +91,15 @@ describe 'traefik::config::section' do
       describe 'when a custom target is set' do
         let(:params) do
           {
-            :target => '/etc/traefik/rules.toml',
-            :description => 'Test section'
+            target: '/etc/traefik/rules.toml',
+            description: 'Test section',
           }
         end
+
         it do
           is_expected.to contain_concat__fragment('traefik_test_header')
             .with_target('/etc/traefik/rules.toml')
-            .with_content(/Test section/)
+            .with_content(%r{Test section})
         end
         it do
           is_expected.to contain_concat__fragment('traefik_test')

@@ -6,7 +6,7 @@ describe 'traefik::service' do
       let(:facts) { facts }
 
       describe 'with default parameters' do
-        it { should compile }
+        it { is_expected.to compile }
 
         it do
           is_expected.to contain_service('traefik')
@@ -16,12 +16,14 @@ describe 'traefik::service' do
       end
 
       describe 'with manage set to false' do
-        let(:params) { {:manage => false} }
+        let(:params) { { manage: false } }
+
         it { is_expected.not_to contain_service('traefik') }
       end
 
       describe 'with a custom ensure value' do
-        let(:params) { {:ensure => 'stopped'} }
+        let(:params) { { ensure: 'stopped' } }
+
         it do
           is_expected.to contain_service('traefik')
             .with_ensure('stopped')
@@ -29,7 +31,8 @@ describe 'traefik::service' do
       end
 
       describe 'with enable set to false' do
-        let(:params) { {:enable => false} }
+        let(:params) { { enable: false } }
+
         it do
           is_expected.to contain_service('traefik')
             .with_enable(false)

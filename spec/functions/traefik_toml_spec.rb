@@ -20,9 +20,9 @@ address = ":443"
       is_expected.to run
         .with_params(
           'entryPoints' => {
-            'http' => {'address' => ':80'},
-            'https' => {'address' => ':443'}
-          }
+            'http' => { 'address' => ':80' },
+            'https' => { 'address' => ':443' },
+          },
         )
         .and_return(entry_points_string)
     end
@@ -32,7 +32,7 @@ address = ":443"
     it do
       is_expected.to run
         .with_params('abc', 'def')
-        .and_raise_error(Puppet::ParseError, /takes exactly 1 argument/)
+        .and_raise_error(Puppet::ParseError, %r{takes exactly 1 argument})
     end
   end
 end
